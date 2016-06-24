@@ -16,8 +16,8 @@ print OUT $header[0]."\tCHR\tSTART\tSTOP\tORN\t".$header[1];
 foreach(@allfile) {
   chomp;
   my @alli = split("\t",$_,2);
-  my @gene = split("\-",$alli[0]);
-  
+  $alli[0] =~ /^(.*)-(\d+)$/;
+  my @gene = ($1, $2);
   print OUT "$gene[0]\t$CHR{$gene[0]}{$gene[1]}\t$POSstart{$gene[0]}{$gene[1]}\t$POSend{$gene[0]}{$gene[1]}\t$ORN{$gene[0]}{$gene[1]}\t$alli[1]\n"; 
 }
 close(OUT);
