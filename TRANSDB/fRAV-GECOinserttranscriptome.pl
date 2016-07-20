@@ -98,7 +98,7 @@ pod2usage( -verbose => 2 )  if ($manual);
 pod2usage( -verbose => 1 )  if ($help);
 
 #file path for input THIS SHOULD BE CONSTANT
-$in1 = "/home/modupeore17/TRANSFER";
+$in1 = "/storage2/modupeore17/LAST"; #TRANSFER2";
 
 # DATABASE ATTRIBUTES
 my $dsn = 'dbi:mysql:transcriptatlas';
@@ -166,7 +166,7 @@ NOTIFICATION("Starting Job");
 # CONNECT TO THE DATABASE
 print "\n\n\tCONNECTING TO THE DATABASE : $dsn\t".`date`."\n\n";
 $dbh = DBI->connect($dsn, $user, $passwd) or die "Connection Error: $DBI::errstr\n";
-#DELETENOTDONE();
+DELETENOTDONE();
 
 foreach my $SubNewFolder (@NewDirectory) {
   if ($SubNewFolder =~ /^\w.*_(\d.*)$/){
@@ -460,14 +460,8 @@ sub VARIANTS{
   my $geneLIST = "$GENOMES/$_[2]/$_[2]".".txt";
   my $DICT = "$GENOMES/$_[2]/$_[2]".".dict";
   my $ANN = $_[3];
-
- #Making directory & testing the existence
-  #`mkdir $Mfolder`; `touch $Mfolder/testing123`;
-  #my $testpath = `ls $Mfolder`;
-  #if (length($testpath) < 1 ){
+  
   $Mfolder = "$STORAGEPATH/$libraryNO"; `mkdir $Mfolder`; print "made $Mfolder\n"; #decided to keep all the variant folders.
-  #`chmod 777 $Mfolder`;
-  #}
   
   # MAYBE RUN ALIGNMENT PROCESS BECAUSE OF DOWNSTREAM CONFLICT -- but for only mouse genome
   if ($specie =~ /mouse/) {
@@ -678,15 +672,16 @@ sub VEPVARIANT {
       if (((split(':', $chrdetails[9]))[0]) eq '0/1'){$verd = "heterozygous";}
       elsif (((split(':', $chrdetails[9]))[0]) eq '1/1'){$verd = "homozygous";}
       elsif (((split(':', $chrdetails[9]))[0]) eq '1/2'){$verd = "heterozygous alternate";}
-
-      #VCFhash information
-      $VCFhash{$chrdetails[0]}{$chrdetails[1]} = "$chrdetails[3]|$chrdetails[4]|$chrdetails[5]|$verd";
       
       #Processing the VEP section
       my @finalchrsplit = split("\,",(((split('=',((split(';',$chrdetails[7]))[-1])))[1]))); 
       foreach my $FCR (0..$#finalchrsplit){
         my @vepdetails = split('\|', $finalchrsplit[$FCR]);
         if ($vepdetails[1] !~ /WITHIN_NON_CODING_GENE/){
+      
+          #VCFhash information
+          $VCFhash{$chrdetails[0]}{$chrdetails[1]} = "$chrdetails[3]|$chrdetails[4]|$chrdetails[5]|$verd";
+      
           if ($vepdetails[14] < 1) {
             $vepdetails[14] = "-";
           }
