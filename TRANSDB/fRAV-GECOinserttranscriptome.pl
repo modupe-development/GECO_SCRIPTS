@@ -166,7 +166,7 @@ NOTIFICATION("Starting Job");
 # CONNECT TO THE DATABASE
 print "\n\n\tCONNECTING TO THE DATABASE : $dsn\t".`date`."\n\n";
 $dbh = DBI->connect($dsn, $user, $passwd) or die "Connection Error: $DBI::errstr\n";
-DELETENOTDONE();
+#DELETENOTDONE();
 
 foreach my $SubNewFolder (@NewDirectory) {
   if ($SubNewFolder =~ /^\w.*_(\d.*)$/){
