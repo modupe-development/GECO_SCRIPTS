@@ -171,7 +171,7 @@ $dbh = DBI->connect($dsn, $user, $passwd) or die "Connection Error: $DBI::errstr
 foreach my $SubNewFolder (@NewDirectory) {
   if ($SubNewFolder =~ /^\w.*_(\d.*)$/){
     CHECKING();
-    unless (exists $Hashresults{$1}){
+    #unless (exists $Hashresults{$1}){
       if (exists $Birdresults{$1}){
         $parsedinput = "$in1/$SubNewFolder";
         $Mfolder = "$parsedinput/variant_output";
@@ -186,7 +186,7 @@ foreach my $SubNewFolder (@NewDirectory) {
       else {
         print "\nSkipping \"library_$1\" in \"$SubNewFolder\" folder because it isn't in birdbase\n$mystderror\n";
       } #end if
-    }else {print "\nLibrary => $1 exists in the database\n";} #end unless
+    #}else {print "\nLibrary => $1 exists in the database\n";} #end unless
   } #end if	 
 } #end foreach
 SUMMARYstmts(); 
@@ -303,32 +303,32 @@ sub PARSING {
       $sth ->execute($lib_id, $total, $mapped, $unmapped, $deletions, $insertions, $junctions, $isoforms, $genes, $prep, $date);
       
       #GENES_FPKM table
-      $sth = $dbh->prepare("insert into genes_fpkm (library_id, tracking_id, class_code, nearest_ref_id, gene_id, gene_short_name, tss_id, chrom_no, chrom_start, chrom_stop, length, coverage, fpkm, fpkm_conf_low, fpkm_conf_high, fpkm_status ) values (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)");
-      while (<GENES>){
-        chomp;
-        my ($track, $class, $ref_id, $gene, $gene_name, $tss, $locus, $length, $coverage, $fpkm, $fpkm_low, $fpkm_high, $fpkm_stat ) = split /\t/;
-        unless ($track eq "tracking_id"){ #check & specifying undefined variables to null
-          if($class =~ /-/){$class = undef;} if ($ref_id =~ /-/){$ref_id = undef;}
-          if ($length =~ /-/){$length = undef;} if($coverage =~ /-/){$coverage = undef;}
-            $locus =~ /^(.+)\:(.+)\-(.+)$/;
-            $chrom_no = $1; $chrom_start = $2; $chrom_stop = $3;
-            $sth ->execute($lib_id, $track, $class, $ref_id, $gene, $gene_name, $tss, $chrom_no, $chrom_start, $chrom_stop, $length, $coverage, $fpkm, $fpkm_low, $fpkm_high, $fpkm_stat );
-        }
-      } close GENES;
+      #$sth = $dbh->prepare("insert into genes_fpkm (library_id, tracking_id, class_code, nearest_ref_id, gene_id, gene_short_name, tss_id, chrom_no, chrom_start, chrom_stop, length, coverage, fpkm, fpkm_conf_low, fpkm_conf_high, fpkm_status ) values (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)");
+      #while (<GENES>){
+      #  chomp;
+      #  my ($track, $class, $ref_id, $gene, $gene_name, $tss, $locus, $length, $coverage, $fpkm, $fpkm_low, $fpkm_high, $fpkm_stat ) = split /\t/;
+      #  unless ($track eq "tracking_id"){ #check & specifying undefined variables to null
+      #    if($class =~ /-/){$class = undef;} if ($ref_id =~ /-/){$ref_id = undef;}
+      #    if ($length =~ /-/){$length = undef;} if($coverage =~ /-/){$coverage = undef;}
+      #      $locus =~ /^(.+)\:(.+)\-(.+)$/;
+      #      $chrom_no = $1; $chrom_start = $2; $chrom_stop = $3;
+      #      $sth ->execute($lib_id, $track, $class, $ref_id, $gene, $gene_name, $tss, $chrom_no, $chrom_start, $chrom_stop, $length, $coverage, $fpkm, $fpkm_low, $fpkm_high, $fpkm_stat );
+      #  }
+      #} close GENES;
 
       #ISOFORMS_FPKM table
-      $sth = $dbh->prepare("insert into isoforms_fpkm (library_id, tracking_id, class_code, nearest_ref_id, gene_id, gene_short_name, tss_id, chrom_no, chrom_start, chrom_stop, length, coverage, fpkm, fpkm_conf_low, fpkm_conf_high, fpkm_status ) values (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)");
-      while (<ISOFORMS>){
-        chomp;
-        my ($track, $class, $ref_id, $gene, $gene_name, $tss, $locus, $length, $coverage, $fpkm, $fpkm_low, $fpkm_high, $fpkm_stat ) = split /\t/;
-        unless ($track eq "tracking_id"){
-          if ($class =~ /-/){$class = undef;} if ($ref_id =~ /-/){$ref_id = undef;}
-          if ($length =~ /-/){$length = undef;} if($coverage =~ /-/){$coverage = undef;}
-          $locus =~ /^(.+)\:(.+)\-(.+)$/;
-          $chrom_no = $1; $chrom_start = $2; $chrom_stop = $3;
-          $sth ->execute($lib_id, $track, $class, $ref_id, $gene, $gene_name, $tss, $chrom_no, $chrom_start, $chrom_stop, $length, $coverage, $fpkm, $fpkm_low, $fpkm_high, $fpkm_stat );
-        }
-      } close ISOFORMS;
+      #$sth = $dbh->prepare("insert into isoforms_fpkm (library_id, tracking_id, class_code, nearest_ref_id, gene_id, gene_short_name, tss_id, chrom_no, chrom_start, chrom_stop, length, coverage, fpkm, fpkm_conf_low, fpkm_conf_high, fpkm_status ) values (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)");
+      #while (<ISOFORMS>){
+      #  chomp;
+      #  my ($track, $class, $ref_id, $gene, $gene_name, $tss, $locus, $length, $coverage, $fpkm, $fpkm_low, $fpkm_high, $fpkm_stat ) = split /\t/;
+      #  unless ($track eq "tracking_id"){
+      #    if ($class =~ /-/){$class = undef;} if ($ref_id =~ /-/){$ref_id = undef;}
+      #    if ($length =~ /-/){$length = undef;} if($coverage =~ /-/){$coverage = undef;}
+      #    $locus =~ /^(.+)\:(.+)\-(.+)$/;
+      #    $chrom_no = $1; $chrom_start = $2; $chrom_stop = $3;
+      #    $sth ->execute($lib_id, $track, $class, $ref_id, $gene, $gene_name, $tss, $chrom_no, $chrom_start, $chrom_stop, $length, $coverage, $fpkm, $fpkm_low, $fpkm_high, $fpkm_stat );
+      #  }
+      #} close ISOFORMS;
   
       #extracting the syntax used for METADATA 
       #temporary replace the file path
@@ -503,9 +503,9 @@ sub VARIANTS{
     DBSNPDATVARIANTS($Mfolder."/".$libraryNO."_DP5.vcf", $Mfolder."/".$libraryNO."_DP5.vcf.output", $libraryNO);
     
   } elsif (exists $VEPparse{$specie}){
-    my $veptxt = "perl $VEP -i $Mfolder/".$libraryNO."_DP5.vcf --fork 24 --species $specie  --dir /home/modupe/.vep/ --cache --merged --everything on --terms ensembl --output_file $Mfolder/".$libraryNO."_VEP.txt";
+    my $veptxt = "perl $VEP -i $Mfolder/".$libraryNO."_DP5.vcf --fork 24 --species gallus_gallus  --dir /home/modupe/.vep/ --offline --merged --everything on --terms ensembl --output_file $Mfolder/".$libraryNO."_VEP.txt";
     `$veptxt`;
-    my $vepvcf = "perl $VEP -i $Mfolder/".$libraryNO."_DP5.vcf --fork 24 --species $specie  --dir /home/modupe/.vep/ --cache --vcf --merged --everything on --terms ensembl --output_file $Mfolder/".$libraryNO."_VEP.vcf";
+    my $vepvcf = "perl $VEP -i $Mfolder/".$libraryNO."_DP5.vcf --fork 24 --species gallus_gallus  --dir /home/modupe/.vep/ --offline --vcf --merged --everything on --terms ensembl --output_file $Mfolder/".$libraryNO."_VEP.vcf";
     `$vepvcf`;
         
     #DATABASE INSERT
