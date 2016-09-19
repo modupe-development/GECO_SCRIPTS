@@ -471,26 +471,26 @@ sub VARIANTS{
   
   #VARIANT ANALYSIS
   #PICARD
-  `java -jar $PICARDDIR SortSam INPUT=$bamfile OUTPUT=$Mfolder/$libraryNO.bam SO=coordinate`;
+#  `java -jar $PICARDDIR SortSam INPUT=$bamfile OUTPUT=$Mfolder/$libraryNO.bam SO=coordinate`;
         
   #ADDREADGROUPS
   my $addreadgroup = "java -jar $PICARDDIR AddOrReplaceReadGroups INPUT=$Mfolder/$libraryNO.bam OUTPUT=$Mfolder/$libraryNO"."_add.bam SO=coordinate RGID=LAbel RGLB=Label RGPL=illumina RGPU=Label RGSM=Label";
-  `$addreadgroup`;
+ # `$addreadgroup`;
   
   #MARKDUPLICATES
   my $markduplicates = "java -jar $PICARDDIR MarkDuplicates INPUT=$Mfolder/".$libraryNO."_add.bam OUTPUT=$Mfolder/".$libraryNO."_mdup.bam M=$Mfolder/".$libraryNO."_mdup.metrics CREATE_INDEX=true";
-  `$markduplicates`;
+  #`$markduplicates`;
   
   #SPLIT&TRIM
   my $splittrim = "java -jar $GATKDIR -T SplitNCigarReads -R $REF -I $Mfolder/".$libraryNO."_mdup.bam -o $Mfolder/".$libraryNO."_split.bam -rf ReassignOneMappingQuality -RMQF 255 -RMQT 60 --filter_reads_with_N_cigar";
-  `$splittrim`;
+  #`$splittrim`;
   
   #GATK
   my $gatk = "java -jar $GATKDIR -T HaplotypeCaller -R $REF -I $Mfolder/".$libraryNO."_split.bam -o $Mfolder/$libraryNO.vcf";
-  `$gatk`;
+  #`$gatk`;
   
   #perl to select DP > 5 & get header information
-  FILTERING($Mfolder, "$Mfolder/$libraryNO.vcf");
+  #FILTERING($Mfolder, "$Mfolder/$libraryNO.vcf");
 
   #ANNOTATIONS : running VEP
   print "this is the species $specie\n"; #Remove this Modupe
@@ -505,6 +505,7 @@ sub VARIANTS{
   } elsif (exists $VEPparse{$specie}){
     my $veptxt = "perl $VEP -i $Mfolder/".$libraryNO."_DP5.vcf --fork 24 --species gallus_gallus  --dir /home/modupe/.vep/ --offline --merged --everything on --terms ensembl --output_file $Mfolder/".$libraryNO."_VEP.txt";
     `$veptxt`;
+
     my $vepvcf = "perl $VEP -i $Mfolder/".$libraryNO."_DP5.vcf --fork 24 --species gallus_gallus  --dir /home/modupe/.vep/ --offline --vcf --merged --everything on --terms ensembl --output_file $Mfolder/".$libraryNO."_VEP.vcf";
     `$vepvcf`;
         
